@@ -13,7 +13,9 @@ function createCountryCard(country){
 	let markup = ``;
 	if(country.length > 1 && country.length < 11){
 		for(let i=1; i<=country.length; i+=1){
-			markup += `<p>${country[i].flag} ${country[i].name.official}</p>`;
+			const propertyNames = country[i].flags;
+			let {svg} = propertyNames;
+			markup += `<p><img src=${(svg)} width="20" alt="">   ${country[i].name.official}</p>`;
 			countryInfoCard.innerHTML = markup;
 			if(i==10){
 				return;
@@ -21,12 +23,15 @@ function createCountryCard(country){
 		};
 	} 
 	else if(country.length == 1){
-		markup = `<h1>${country[0].flag} ${country[0].name.official}</h1>
+		const propertyNames = country[0].flags;
+		let {svg} = propertyNames;
+		markup = `<h1><img src=${(svg)} width="30" alt=""> ${country[0].name.official}</h1>
 		<div class="otherParametrsContainer">
 			<p>Capital: ${country[0].capital}</p>
 			<p>Population: ${country[0].population}</p>
 			<p>Languages: ${Object.values(country[0].languages)}</p>
 		</div>`
+		// console.log(Object.keys(country[0].flags[svg]));
 	} else if(country.length >= 11){
 		markup = '';
 		Notiflix.Notify.success("Too many matches found. Please enter a more specific name.");
@@ -36,3 +41,4 @@ function createCountryCard(country){
 	}
 	countryInfoCard.innerHTML = markup;
 }
+
