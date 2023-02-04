@@ -4,7 +4,7 @@ export function returnFetch(name){
 		if(response.ok === true){
 			return response.json();
 		} else{
-			return response.status;
+			return response;
 		}
 	})
 }

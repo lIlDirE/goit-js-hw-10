@@ -19,6 +19,7 @@ textInput.addEventListener("input", debounce(eventInput, 300));
 
 function createCountryCard(country){
 	let markup = ``;
+	console.log(country.length);
 	if(country.length > 1 && country.length < 11){
 		markup = markupList(country);
 	} 
@@ -27,10 +28,10 @@ function createCountryCard(country){
 	} else if(country.length >= 11){
 		markup = '';
 		Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
-	} else if(country === 404){
+	} else if(country.statusText === "Not Found"){
 		markup = '';
 		Notiflix.Notify.failure("Oops, there is no country with that name");
-		throw new error();
+		throw new Error(country.statusText);
 	}
 	countryInfoCard.innerHTML = markup;
 }
@@ -46,14 +47,21 @@ function markupSoloCard(event){
 	</div>`
 }
 
-function markupList(event){
-	let markup ='';
-	event.forEach(element => {
-		let {svg} = element.flags;
-		markup += `<p><img src=${(svg)} width="20" alt=""> ${element.name.official}<p/>`;
-	});
-	return markup;	
-  }
+function markupList(country = []) {
+	return country.map(
+	   ({ flags, name }) =>
+	`<p><img src=${flags.svg} width="20" alt=""> ${name.official}<p/>`
+	 ).join('')
+   } 
+
+// function markupList(event){
+// 	let markup ='';
+// 	event.forEach(element => {
+// 		let {svg} = element.flags;
+// 		markup += `<p><img src=${(svg)} width="20" alt=""> ${element.name.official}<p/>`;
+// 	});
+// 	return markup;	
+//   }
 
 // Подскажите, пожалуйста, как сделать через map. Ниже то что я смог надумать и я уперся в два массива. Дальше не пойму куда идти
 //   function markupList(event){
