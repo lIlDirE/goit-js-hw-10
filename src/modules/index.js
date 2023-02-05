@@ -11,7 +11,7 @@ const eventInput = () => {
 	if(text == ""){
 		return;
 	} else{
-		returnFetch(text).then(createCountryCard);
+		returnFetch(text).then(createCountryCard).catch(newError);
 	}
 }
 
@@ -19,7 +19,6 @@ textInput.addEventListener("input", debounce(eventInput, 300));
 
 function createCountryCard(country){
 	let markup = ``;
-	console.log(country.length);
 	if(country.length > 1 && country.length < 11){
 		markup = markupList(country);
 	} 
@@ -28,11 +27,7 @@ function createCountryCard(country){
 	} else if(country.length >= 11){
 		markup = '';
 		Notiflix.Notify.info("Too many matches found. Please enter a more specific name.");
-	} else if(country.statusText === "Not Found"){
-		markup = '';
-		Notiflix.Notify.failure("Oops, there is no country with that name");
-		throw new Error(country.statusText);
-	}
+	} 
 	countryInfoCard.innerHTML = markup;
 }
 
@@ -54,21 +49,6 @@ function markupList(country = []) {
 	 ).join('')
    } 
 
-// function markupList(event){
-// 	let markup ='';
-// 	event.forEach(element => {
-// 		let {svg} = element.flags;
-// 		markup += `<p><img src=${(svg)} width="20" alt=""> ${element.name.official}<p/>`;
-// 	});
-// 	return markup;	
-//   }
-
-// Подскажите, пожалуйста, как сделать через map. Ниже то что я смог надумать и я уперся в два массива. Дальше не пойму куда идти
-//   function markupList(event){
-//   let flag = [];
-//   const flagsArr = event.map(e => e.flags);
-//   flagsArr.forEach(element => {
-// 	  flag.push(element.svg);
-//   });
-//   markup = event.map(e => `<p><img src=${{??}} width="20" alt="">${e.name.official}<p/>`);
-//}
+function newError(){
+	Notiflix.Notify.failure("Oops, there is no country with that name");
+}
